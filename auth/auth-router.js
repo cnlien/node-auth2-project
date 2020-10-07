@@ -39,7 +39,36 @@ router.post('/register', async (req, res, next) => {
 })
 
 router.post('/login', async (req, res, next) => {
-
+    const { username, password } = req.body;
+    try {
+        if (!isValid(req.body)) {
+            next({
+                apiCode: 400,
+                apiMessage: 'Invalid username or password.'
+            })
+        } else {
+            const [user] = await Users.findBy({ username: username });
+            if (user && bcryptjs.compareSync(password, user.password)) {
+                const token = generateToken(user);
+                res.status(200).json({
+                    message: 'Login successful',
+                    token: token
+                })
+            } else {
+                next({
+                    apiCode: 401,
+                    apiMessage: 'Invalid username or password.'
+                })
+            }
+        }
+    }
+    catch (err) {
+        next({
+            apiCode: 500,
+            apiMessage: 'There was an error with the database when logging in',
+            error: err
+        })
+    }
 })
 
 function generateToken(user) {
