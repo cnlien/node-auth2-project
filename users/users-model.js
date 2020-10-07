@@ -9,7 +9,7 @@ module.exports = {
 
 function find() {
   return knex("users")
-    .select("id", "username")
+    .select("id", "username", "department")
     .orderBy("id");
 }
 

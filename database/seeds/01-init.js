@@ -1,6 +1,10 @@
 exports.seed = function(knex) {
   const departments = [
     {
+      name: 'Admin',
+      abbreviation: 'AD'
+    },
+    {
       name: 'Backend',
       abbreviation: 'BE'
     },
